@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1">
+  <title>My Study Website</title>
+  <style>
+    body {
+      background: #fff0f5;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 30px;
+      color: #333;
+    }
+    h1 { color: #c45b85; }
+    .card {
+      background: white;
+      padding: 25px;
+      margin: 20px auto;
+      max-width: 500px;
+      border-radius: 15px;
+      box-shadow: 0 3px 10px #ddd;
+    }
+  </style>
+</head>
+<body>
+  <h1>Welcome to My Study Website!</h1>
+  <p>Study smarter, not harder!</p>
+
+  <div class="card">
+    <h2>My Study Guides</h2>
+    <p>Find notes and study materials here.</p>
+  </div>
+
+  <div class="card">
+    <h2>Exam Preparation</h2>
+    <p>Stay organized and ready for exams!</p>
+  </div>
+</body>
+</html>
