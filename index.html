@@ -1,133 +1,40 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>My Study Hub</title>
-<style>
-body {
-  font-family: Arial, sans-serif;
-  background: #fff0f5;
-  color: #444;
-  text-align: center;
-  padding: 25px;
-}
-h1, h2 { color: #b03060; }
-button {
-  background: #c45b85;
-  color: white;
-  border: none;
-  padding: 13px 22px;
-  border-radius: 12px;
-  cursor: pointer;
-  margin: 8px;
-}
-.card {
-  background: white;
-  padding: 25px;
-  margin: 20px auto;
-  max-width: 550px;
-  border-radius: 18px;
-  box-shadow: 0 3px 12px #ead0d9;
-}
-.flashcard {
-  background: #ffe1ec;
-  padding: 45px 20px;
-  border-radius: 15px;
-  cursor: pointer;
-  margin: 20px 0;
-  font-size: 20px;
-  min-height: 65px;
-}
-.hidden { display: none; }
-</style>
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1">
+  <title>My Study Website</title>
+  <style>
+    body {
+      background: #fff0f5;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 30px;
+      color: #333;
+    }
+    h1 { color: #c45b85; }
+    .card {
+      background: white;
+      padding: 25px;
+      margin: 20px auto;
+      max-width: 500px;
+      border-radius: 15px;
+      box-shadow: 0 3px 10px #ddd;
+    }
+  </style>
 </head>
 <body>
+  <h1>Welcome to My Study Website!</h1>
+  <p>Study smarter, not harder!</p>
 
-<h1>My Study Hub ♡</h1>
-<p>Study smarter, not harder!</p>
-
-<button onclick="show('guides')">
-  Study Guides
-</button>
-<button onclick="show('flashcards')">
-  Flashcards
-</button>
-
-<div id="guides" class="card">
-  <h2>My Study Guides</h2>
-  <h3>Statistics</h3>
-  <p>
-    Mean: The average of a dataset.
-  </p>
-  <p>
-    Median: The middle value in sorted data.
-  </p>
-  <p>
-    Mode: The most frequent value.
-  </p>
-  <h3>Exam Tips</h3>
-  <p>Review formulas and practice problems!</p>
-</div>
-
-<div id="flashcards" class="card hidden">
-  <h2>My Flashcards</h2>
-  <p>Click the card to flip it!</p>
-
-  <div class="flashcard" onclick="flip()"
-       id="flashcard">
-    What is the mean?
+  <div class="card">
+    <h2>My Study Guides</h2>
+    <p>Find notes and study materials here.</p>
   </div>
 
-  <button onclick="nextCard()">Next Card →</button>
-  <p id="counter"></p>
-</div>
-
-<script>
-const cards = [
-  ["What is the mean?",
-   "The average of a dataset."],
-  ["What is the median?",
-   "The middle value in sorted data."],
-  ["What is the mode?",
-   "The most frequent value."],
-  ["What is standard deviation?",
-   "A measure of data spread."]
-];
-
-let index = 0;
-let flipped = false;
-
-function show(section) {
-  document.getElementById("guides")
-    .classList.add("hidden");
-  document.getElementById("flashcards")
-    .classList.add("hidden");
-  document.getElementById(section)
-    .classList.remove("hidden");
-}
-
-function renderCard() {
-  document.getElementById("flashcard")
-    .textContent = flipped
-    ? cards[index][1]
-    : cards[index][0];
-  document.getElementById("counter")
-    .textContent =
-    (index + 1) + " of " + cards.length;
-}
-
-function flip() {
-  flipped = !flipped;
-  renderCard();
-}
-
-function nextCard() {
-  index = (index + 1) % cards.length;
-  flipped = false;
-  renderCard();
-}
-
-renderCard();
-</script>
+  <div class="card">
+    <h2>Exam Preparation</h2>
+    <p>Stay organized and ready for exams!</p>
+  </div>
 </body>
 </html>
