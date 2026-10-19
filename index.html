@@ -1,40 +1,195 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta name="viewport"
-        content="width=device-width, initial-scale=1">
-  <title>My Study Website</title>
-  <style>
-    body {
-      background: #fff0f5;
-      font-family: Arial, sans-serif;
-      text-align: center;
-      padding: 30px;
-      color: #333;
-    }
-    h1 { color: #c45b85; }
-    .card {
-      background: white;
-      padding: 25px;
-      margin: 20px auto;
-      max-width: 500px;
-      border-radius: 15px;
-      box-shadow: 0 3px 10px #ddd;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My Study Hub ♡</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#fff1f6;color:#513747;font-family:Arial,sans-serif}
+header{text-align:center;padding:40px 15px}
+h1{color:#bd467f;font-size:38px}
+h2{color:#b33f75}
+nav{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+button{background:#c84f89;color:white;border:0;border-radius:12px;padding:13px 19px;cursor:pointer;font-size:15px}
+button:hover{background:#a93670}
+main{max-width:850px;margin:0 auto;padding:15px}
+section{background:white;padding:25px;border-radius:20px;margin-bottom:25px;box-shadow:0 5px 20px #d88eaa22}
+input,textarea{width:100%;padding:13px;margin:8px 0 15px;border:1px solid #e4b3c8;border-radius:10px;font:inherit}
+textarea{min-height:100px}
+.card{background:#fbd9e7;min-height:210px;display:flex;align-items:center;justify-content:center;text-align:center;border-radius:20px;padding:25px;margin:20px 0;cursor:pointer;font-size:22px;line-height:1.5;overflow-wrap:anywhere}
+.controls{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.saved{background:#fff1f6;padding:15px;border-radius:12px;margin:12px 0;white-space:pre-wrap;overflow-wrap:anywhere}
+small{color:#806b76}
+[hidden]{display:none!important}
+</style>
 </head>
 <body>
-  <h1>Welcome to My Study Website!</h1>
-  <p>Study smarter, not harder!</p>
+<header>
+<h1>My Study Hub ♡</h1>
+<p>Study smarter, not harder!</p>
+<nav>
+<button onclick="show('guides')">📖 Study Guides</button>
+<button onclick="show('flashcards')">🗂️ Flashcards</button>
+</nav>
+</header>
+<main>
+<section id="guides">
+<h2>My Study Guides</h2>
+<p>Create a guide for each class or topic.</p>
+<label>Guide title</label>
+<input id="guideTitle" placeholder="e.g., H354 Exam 1">
+<label>Your notes</label>
+<textarea id="guideNotes" placeholder="Paste or type your study notes here..."></textarea>
+<button onclick="saveGuide()">Save Study Guide</button>
+<div id="guideList"></div>
+</section>
 
-  <div class="card">
-    <h2>My Study Guides</h2>
-    <p>Find notes and study materials here.</p>
-  </div>
+<section id="flashcards" hidden>
+<h2>My Flashcards — H354</h2>
+<p>Practice your healthcare finance flashcards!</p>
+<p id="counter"></p>
+<div id="card" class="card" onclick="flip()"></div>
+<div class="controls">
+<button onclick="previous()">← Previous</button>
+<button onclick="flip()">Flip Card</button>
+<button onclick="next()">Next →</button>
+<button onclick="shuffle()">Shuffle</button>
+</div>
+<h3>Add a Flashcard</h3>
+<label>Question (front)</label>
+<textarea id="front" placeholder="Type your question"></textarea>
+<label>Answer (back)</label>
+<textarea id="back" placeholder="Type your answer"></textarea>
+<button onclick="addCard()">Add Flashcard</button>
+</section>
+<p><small>Custom notes and cards are saved in this browser only. Clearing browser data may delete them.</small></p>
+</main>
 
-  <div class="card">
-    <h2>Exam Preparation</h2>
-    <p>Stay organized and ready for exams!</p>
-  </div>
+<script>
+const originalCards = [
+["What is moral hazard?","Insurance lowers the price of care at the point of use, causing people to use more care."],
+["Moral hazard = WHO or WHAT?","WHAT insured people do after getting coverage—the intensive margin."],
+["What is adverse selection?","People have private information about their health risk, so the people choosing insurance may differ systematically in risk."],
+["Adverse selection = WHO or WHAT?","WHO chooses to enroll—the extensive margin."],
+["What is the H354 healthcare demand elasticity from RAND?","About −0.2. Healthcare demand is relatively inelastic."],
+["How do you use elasticity?","% change in Q = elasticity × % change in P."],
+["What is a pooled premium?","A premium based on the average expected cost of everyone in the insurance pool."],
+["How do you calculate a pooled premium?","Add each group's probability/share × expected cost."],
+["What is an insurance death spiral?","Healthy people leave → average risk rises → premiums rise → more healthy people leave."],
+["Who typically leaves first in a death spiral?","Lower-risk/healthier people, because the pooled premium is relatively unattractive to them."],
+["What is underwriting?","Using information about risk to classify applicants and price insurance."],
+["What is Medical Loss Ratio (MLR)?","Benefits paid ÷ premiums collected."],
+["Minimum MLR for individual/small-group plans?","80%."],
+["Minimum MLR for large-group plans?","85%."],
+["What is the lemons problem?","When one side knows more about quality, good-quality sellers may leave because uninformed buyers won't pay enough for them."],
+["Who knows more in the used-car lemons example?","The seller knows the car's quality."],
+["Who knows more in health-insurance adverse selection?","The buyer/patient knows more about their health risk."],
+["What are separating contracts?","Different insurance contracts designed so different risk types sort themselves into different plans."],
+["Why can Gold vs. Bronze plans help with private information?","Different risk types value premiums and cost sharing differently, so plan choice reveals information."],
+["Why can group insurance reduce adverse selection?","People join the group primarily for reasons like employment rather than solely because they expect high medical spending."],
+["What is total compensation?","Cash wage + benefits such as employer health insurance."],
+["Are employer health benefits simply free money on top of wages?","No. Benefits are part of the worker's total compensation and can come with lower cash wages."],
+["What is a compensating differential?","Workers may accept lower cash wages in exchange for benefits they value."],
+["When an employer adds a benefit, how does labor demand shift?","Down by the COST of the benefit to the employer."],
+["When an employer adds a benefit, how does labor supply shift?","Down by the VALUE of the benefit to workers."],
+["Benefit value = benefit cost. What happens?","Cash wage falls by the full cost; employment stays unchanged in the H354 model."],
+["Worker value < employer cost. What happens?","Cash wage falls by less than the benefit cost, and employment falls."],
+["Worker value > employer cost. What happens?","Cash wage can fall by more than the cost, and employment rises in the H354 model."],
+["Who bears the cost of employer health insurance?","Often workers bear much of it through lower cash wages/slower wage growth."],
+["Key incidence rule?","Who writes the check does not necessarily determine who bears the economic cost."],
+["Why is employer health insurance tax advantaged?","Employer-paid premiums are excluded from taxable income, while cash wages are taxable."],
+["After-tax wage formula?","W × (1 − tax rate)."],
+["Tax savings from the ESI exclusion?","Premium × marginal tax rate."],
+["Who receives a larger dollar benefit from the ESI tax exclusion?","A worker with a higher marginal tax rate, holding the premium constant."],
+["How do you find an indifference salary with employer insurance?","Determine required after-tax income, then solve W(1 − tax rate) = required pocket income."],
+["What is Medicare Part A?","Hospital care."],
+["What is Medicare Part B?","Physician and outpatient services."],
+["What is Medicare Part C?","Medicare Advantage—private managed-care plans paid a fixed amount per enrollee."],
+["What is Medicare Part D?","Prescription drug coverage through competing private plans."],
+["What is Medigap?","Private supplemental insurance that pays some cost sharing left by Medicare."],
+["Why can Medigap create a moral-hazard issue?","It lowers the patient's out-of-pocket price → use rises → Medicare may pay much of the cost of additional care."],
+["H354 graph rule to remember?","A change in a good's own price causes movement along its curve, not a shift of that curve."],
+["Best way to approach an H354 calculation?","Identify what you're calculating → write equation → substitute → solve → check → interpret in words."]
+];
+
+function load(key,fallback){
+try{return JSON.parse(localStorage.getItem(key))||fallback}
+catch{return fallback}
+}
+let cards=originalCards.concat(load("extraH354Cards",[]));
+let index=0;
+let flipped=false;
+
+function show(id){
+document.getElementById("guides").hidden=id!=="guides";
+document.getElementById("flashcards").hidden=id!=="flashcards";
+if(id==="flashcards")renderCard();
+}
+function renderCard(){
+document.getElementById("counter").textContent="Card "+(index+1)+" of "+cards.length+" — "+(flipped?"Answer":"Question");
+document.getElementById("card").textContent=cards[index][flipped?1:0];
+}
+function flip(){flipped=!flipped;renderCard()}
+function next(){index=(index+1)%cards.length;flipped=false;renderCard()}
+function previous(){index=(index-1+cards.length)%cards.length;flipped=false;renderCard()}
+function shuffle(){
+for(let i=cards.length-1;i>0;i--){
+let j=Math.floor(Math.random()*(i+1));
+[cards[i],cards[j]]=[cards[j],cards[i]];
+}
+index=0;flipped=false;renderCard();
+}
+function addCard(){
+const q=document.getElementById("front").value.trim();
+const a=document.getElementById("back").value.trim();
+if(!q||!a){alert("Enter both a question and answer.");return}
+const extra=load("extraH354Cards",[]);
+extra.push([q,a]);
+localStorage.setItem("extraH354Cards",JSON.stringify(extra));
+cards.push([q,a]);
+index=cards.length-1;flipped=false;
+document.getElementById("front").value="";
+document.getElementById("back").value="";
+renderCard();
+}
+function saveGuide(){
+const title=document.getElementById("guideTitle").value.trim();
+const notes=document.getElementById("guideNotes").value.trim();
+if(!title||!notes){alert("Enter a title and notes.");return}
+const guides=load("myStudyGuides",[]);
+guides.push({title,notes});
+localStorage.setItem("myStudyGuides",JSON.stringify(guides));
+document.getElementById("guideTitle").value="";
+document.getElementById("guideNotes").value="";
+renderGuides();
+}
+function renderGuides(){
+const area=document.getElementById("guideList");
+area.replaceChildren();
+const guides=load("myStudyGuides",[]);
+if(!guides.length){area.textContent="No study guides yet.";return}
+guides.forEach((g,i)=>{
+const div=document.createElement("div");
+div.className="saved";
+const h=document.createElement("h3");
+h.textContent=g.title;
+const p=document.createElement("p");
+p.textContent=g.notes;
+const b=document.createElement("button");
+b.textContent="Delete Guide";
+b.onclick=()=>{
+if(confirm("Delete this guide?")){
+guides.splice(i,1);
+localStorage.setItem("myStudyGuides",JSON.stringify(guides));
+renderGuides();
+}};
+div.append(h,p,b);
+area.appendChild(div);
+});
+}
+renderGuides();
+renderCard();
+</script>
 </body>
 </html>
